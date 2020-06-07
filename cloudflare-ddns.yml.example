@@ -1,0 +1,6 @@
+---
+
+# This file should be saved as .cloudflare-ddns.(yml|json.toml) in the running directory
+zone: <name of the zone>
+zone_id: <zone id of the zone>
+token: <api token created to modify the zone>
