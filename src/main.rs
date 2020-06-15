@@ -1,11 +1,12 @@
 // External libs
 use reqwest::Client;
 use serde_json::{json, Value};
-type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
 
 // Local libs
 mod settings;
 use settings::Settings;
+
+type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
 
 async fn get_ip(client: &Client) -> Result<String> {
     let ip: Vec<u8> = client
@@ -33,9 +34,9 @@ async fn get_zone_dns_records(client: &Client, settings: &Settings) -> Result<(S
         .send()
         .await?;
     let v: Value = serde_json::from_str(&resp.text().await?)?;
-    let ip: &str = v["result"][0]["content"].as_str().unwrap();
+    let addr: &str = v["result"][0]["content"].as_str().unwrap();
     let id: &str = v["result"][0]["id"].as_str().unwrap();
-    Ok((String::from(ip), String::from(id)))
+    Ok((String::from(addr), String::from(id)))
 }
 
 async fn update_zone_a_record_ip(
