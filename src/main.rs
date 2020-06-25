@@ -1,4 +1,5 @@
 // External libs
+use ipify_async;
 use reqwest::Client;
 use serde_json::{json, Value};
 
@@ -7,19 +8,6 @@ mod settings;
 use settings::Settings;
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
-
-async fn get_ip(client: &Client) -> Result<String> {
-    let ip: Vec<u8> = client
-        .get("https://api.ipify.org")
-        .send()
-        .await?
-        .text()
-        .await?
-        .split(".")
-        .map(|x| x.parse::<u8>().unwrap())
-        .collect();
-    Ok(format!("{}.{}.{}.{}", ip[0], ip[1], ip[2], ip[3]))
-}
 
 async fn get_zone_dns_records(client: &Client, settings: &Settings) -> Result<(String, String)> {
     // Returns the "content" of the A record
@@ -69,7 +57,7 @@ async fn main() -> Result<()> {
     let client = Client::new();
     let settings = Settings::new().unwrap();
 
-    let current_ip = get_ip(&client).await?;
+    let current_ip = ipify_async::get_ip().await.unwrap().to_string();
     let (zone_ip, id) = get_zone_dns_records(&client, &settings).await?;
 
     if current_ip != zone_ip {
