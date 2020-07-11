@@ -10,6 +10,7 @@ use dns_records::DNSRecord;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // Create a new CloudFlare Client
     let client: CloudFlareClient = CloudFlareAPI::new();
 
     // Grab the systems current public IP address through ipify API
