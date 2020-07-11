@@ -4,7 +4,7 @@ use serde::Deserialize;
 pub struct DNSRecord {
     #[serde(alias = "result")]
     pub records: Vec<Records>,
-    pub success: String,
+    pub success: bool,
 }
 
 #[derive(Deserialize)]
